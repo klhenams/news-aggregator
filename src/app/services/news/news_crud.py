@@ -34,8 +34,8 @@ class InMemoryMessageCrud(NewsCrud):
         return self.articles
     
     
-    def search(self, query: str) -> News:
-        pass
+    def search(self, query: str) -> List[News]:
+        return [article for article in self.articles if query in article.headline]
 
 
 
