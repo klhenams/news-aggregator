@@ -17,11 +17,14 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
-@app.get("/news/")
-def read_item():
-    return newscrud_service.list()
+@app.get("/news")
+def read_news(q: Union[str, None] = None):
+    if q is None:
+        return newscrud_service.list()
+    else:
+        return newscrud_service.search(q)
 
 
 @app.post("/news/reddit")
-def read_item():
+def read_news():
     return Reddit.get()
