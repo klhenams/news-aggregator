@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List
-import requests
 
 from ..services.news.news_crud import NewsCrudFactory
 from ..models.news import News
+from ..utils.http_client import HTTPClient
 
 
 
@@ -22,13 +22,11 @@ class NewsWrapper(ABC):
 class Reddit(NewsWrapper):
 
     in_memory_news = NewsCrudFactory.default()
+    r = HTTPClient()
 
     @staticmethod
     def get():
-        results = requests.get(
-            'https://www.reddit.com/r/news/top.json?limit=10', 
-            headers={'User-agent': 'your bot 0.1'}).json()
-        return Reddit.parse_response(results)
+        return Reddit.parse_response(Reddit.r.get('reddit'))
            
 
     @staticmethod
@@ -39,3 +37,23 @@ class Reddit(NewsWrapper):
                 link=article["data"]["url"],
                 source="reddit")
         return Reddit.in_memory_news.list()
+    
+
+class NewsSource(NewsWrapper):
+
+    in_memory_news = NewsCrudFactory.default()
+    r = HTTPClient()
+
+    @staticmethod
+    def get():
+        return NewsSource.parse_response(NewsSource.r.get('news'))
+           
+
+    @staticmethod
+    def parse_response(results) -> List[News]:
+        for article in results["articles"]:
+            NewsSource.in_memory_news.create(
+                headline=article["title"],
+                link=article["url"],
+                source="newsapi")
+        return NewsSource.in_memory_news.list()
