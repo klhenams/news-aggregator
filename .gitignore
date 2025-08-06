@@ -50,6 +50,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+.cov/
 
 # Translations
 *.mo
@@ -127,3 +128,44 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Production files
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Logs
+logs/
+*.log
+
+# Database migrations (if using Alembic)
+# Uncomment if you want to ignore migration files
+# alembic/versions/*.py
+
+# Local configuration overrides
+.env.local
+.env.production
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# Security
+*.pem
+*.key
+*.crt
