@@ -1,9 +1,8 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_db, engine
+from app.dependencies import NewsServiceDep
 from app.schemas import HealthResponse
 from app.core.config import get_settings
 
@@ -17,20 +16,18 @@ settings = get_settings()
     summary="Health Check",
     description="Check the health of the application and its dependencies"
 )
-async def health_check(db: AsyncSession = Depends(get_db)):
+async def health_check(news_service: NewsServiceDep = Depends()):
     """Health check endpoint."""
-    dependencies = {}
     
-    # Check database connection
-    try:
-        await db.execute("SELECT 1")
-        dependencies["database"] = "healthy"
-    except Exception as e:
-        dependencies["database"] = f"unhealthy: {str(e)}"
+    # Get service health (includes repository health)
+    service_health = await news_service.health_check()
     
-    # Check external APIs (simplified)
-    dependencies["reddit_api"] = "not_checked"  # Could add actual check
-    dependencies["news_api"] = "not_checked"    # Could add actual check
+    dependencies = {
+        "news_service": service_health,
+        "data_source": settings.data_source,
+        "reddit_api": "not_checked",  # Could add actual check
+        "news_api": "not_checked"     # Could add actual check
+    }
     
     return HealthResponse(
         status="healthy",

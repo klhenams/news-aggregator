@@ -37,6 +37,9 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
     cache_ttl: int = 300
     
+    # Data Source Configuration
+    data_source: str = "database"  # Options: memory, database, redis, etc.
+    
     # HTTP Client
     request_timeout: int = 30
     max_retries: int = 3

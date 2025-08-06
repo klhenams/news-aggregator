@@ -90,7 +90,94 @@ gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
 
 Visit `http://localhost:8000/docs` for the interactive API documentation.
 
-## 🐳 Docker Deployment
+## � Flexible Data Sources
+
+The application supports multiple data sources through a factory pattern, allowing you to switch between different storage backends without changing your application code.
+
+### Available Data Sources
+
+| Type | Status | Description | Use Case |
+|------|--------|-------------|----------|
+| **Memory** | ✅ Available | In-memory storage (volatile) | Development, testing, caching |
+| **Database** | ✅ Available | SQL database (PostgreSQL/SQLite) | Production, persistence |
+| **Redis** | 🔄 Planned | Redis cache storage | High-performance caching |
+| **Elasticsearch** | 🔄 Planned | Full-text search optimized | Search-heavy applications |
+| **MongoDB** | 🔄 Planned | Document-based storage | Flexible schema requirements |
+| **File** | 🔄 Planned | File-based storage | Simple deployments |
+
+### Configuration
+
+Set your preferred data source in the environment:
+
+```bash
+# In .env file
+DATA_SOURCE=database  # Options: memory, database, redis, etc.
+
+# Or as environment variable
+export DATA_SOURCE=memory
+```
+
+### Usage Examples
+
+**Using Memory Storage (Development):**
+```python
+from app.repositories.factory import NewsRepositoryFactory, DataSourceType
+from app.services.news_service import NewsService
+
+# Create memory repository
+repo = await NewsRepositoryFactory.create_repository(DataSourceType.MEMORY)
+service = NewsService(repo)
+
+# Use normally
+articles = await service.get_articles()
+```
+
+**Using Database Storage (Production):**
+```python
+# With database session
+repo = await NewsRepositoryFactory.create_repository(
+    DataSourceType.DATABASE, 
+    db_session=db_session
+)
+service = NewsService(repo)
+```
+
+**Configuration-Based (Recommended):**
+```python
+# Automatically uses DATA_SOURCE from config
+repo = await NewsRepositoryFactory.create_from_config(db_session)
+service = NewsService(repo)
+```
+
+### Adding Custom Data Sources
+
+Extend the system by implementing the `NewsRepository` interface:
+
+```python
+from app.repositories.base import NewsRepository
+from app.repositories.factory import NewsRepositoryFactory, DataSourceType
+
+class CustomRepository(NewsRepository):
+    async def create(self, news_data: NewsCreate) -> NewsResponse:
+        # Your implementation
+        pass
+    
+    # ... implement other required methods
+
+# Register your custom repository
+NewsRepositoryFactory.register_repository(
+    DataSourceType.REDIS,  # or your custom type
+    CustomRepository
+)
+
+# Use it
+repo = await NewsRepositoryFactory.create_repository(
+    DataSourceType.REDIS,
+    your_custom_params="value"
+)
+```
+
+See `examples/data_source_examples.py` for complete implementation examples.
 
 ### Quick Start with Docker Compose
 
