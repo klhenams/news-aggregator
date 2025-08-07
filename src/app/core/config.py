@@ -3,7 +3,11 @@
 from functools import lru_cache
 from typing import List, Union
 
-from pydantic import BaseSettings, validator
+try:
+    from pydantic import validator
+    from pydantic_settings import BaseSettings
+except ImportError:
+    from pydantic import BaseSettings, validator
 
 
 class Settings(BaseSettings):

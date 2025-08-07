@@ -37,7 +37,6 @@ class DatabaseNewsRepository(NewsRepository):
                 headline=news_data.headline,
                 link=str(news_data.link),
                 source=news_data.source,
-                created_at=datetime.utcnow(),
             )
 
             self.db.add(db_article)
@@ -118,16 +117,18 @@ class DatabaseNewsRepository(NewsRepository):
     ) -> List[NewsResponse]:
         """Search news articles by query."""
         try:
-            search_query = select(News).where(
-                or_(
-                    News.headline.ilike(f"%{query}%"),
-                    (
-                        News.summary.ilike(f"%{query}%")
-                        if hasattr(News, "summary")
-                        else False
-                    ),
-                )
-            )
+            # Build search conditions
+            conditions = [News.headline.ilike(f"%{query}%")]
+            if hasattr(News, "summary") and News.summary is not None:
+                conditions.append(News.summary.ilike(f"%{query}%"))
+
+            # Only use or_ if we have multiple conditions
+            if len(conditions) > 1:
+                search_condition = or_(*conditions)
+            else:
+                search_condition = conditions[0]
+
+            search_query = select(News).where(search_condition)
 
             if source:
                 search_query = search_query.where(News.source == source)
@@ -213,8 +214,9 @@ class DatabaseNewsRepository(NewsRepository):
                 if hasattr(article, field):
                     setattr(article, field, value)
 
-            # Update timestamp
-            article.updated_at = datetime.utcnow()
+            # Update timestamp if the column exists
+            if hasattr(article, "updated_at"):
+                setattr(article, "updated_at", datetime.utcnow())
 
             await self.db.commit()
             await self.db.refresh(article)
@@ -265,9 +267,9 @@ class DatabaseNewsRepository(NewsRepository):
         """Convert database model to response model."""
         return NewsResponse(
             id=str(article.id),
-            headline=article.headline,
-            link=article.link,
-            source=article.source,
+            headline=str(article.headline),
+            link=str(article.link),  # Convert to string for HttpUrl validation
+            source=str(article.source),
             created_at=article.created_at,
             summary=getattr(article, "summary", None),
         )
@@ -291,7 +293,6 @@ class DatabaseNewsRepository(NewsRepository):
                         headline=article_data.headline,
                         link=str(article_data.link),
                         source=article_data.source,
-                        created_at=datetime.utcnow(),
                     )
                     self.db.add(db_article)
                     created_articles.append(self._to_response(db_article))

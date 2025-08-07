@@ -40,7 +40,6 @@ services:
 
   db:
     image: postgres:15-alpine
-    platform: linux/arm64/v8
     environment:
       - POSTGRES_DB=newsdb_dev
       - POSTGRES_USER=postgres
@@ -59,7 +58,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    platform: linux/arm64/v8
     ports:
       - "6380:6379"  # Different port to avoid conflicts
     volumes:
@@ -101,7 +99,6 @@ services:
   # Database admin interface
   pgadmin:
     image: dpage/pgadmin4:latest
-    platform: linux/arm64/v8
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@example.com
       - PGADMIN_DEFAULT_PASSWORD=admin
@@ -114,10 +111,9 @@ services:
       - pgadmin_dev_data:/var/lib/pgadmin
     restart: unless-stopped
 
-  # Redis admin interface (ARM64 compatible)
+  # Redis admin interface (Platform agnostic)
   redis-admin:
     image: redis/redisinsight:latest
-    platform: linux/arm64/v8
     ports:
       - "8081:8001"
     environment:
@@ -132,7 +128,6 @@ services:
   # Alternative Redis CLI access via web interface
   redis-web:
     image: erikdubbelboer/phpredisadmin:latest
-    platform: linux/arm64/v8
     ports:
       - "8082:80"
     environment:

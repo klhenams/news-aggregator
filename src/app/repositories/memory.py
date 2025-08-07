@@ -39,6 +39,7 @@ class InMemoryNewsRepository(NewsRepository):
                 link=news_data.link,
                 source=news_data.source,
                 created_at=datetime.utcnow(),
+                summary=getattr(news_data, "summary", None),
             )
 
             self._articles[article_id] = article

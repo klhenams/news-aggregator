@@ -9,6 +9,7 @@ from sqlalchemy.sql import func
 if TYPE_CHECKING:
     from sqlalchemy.ext.declarative import DeclarativeMeta
 
+# Create base class - mypy will understand this properly
 Base: "DeclarativeMeta" = declarative_base()
 
 

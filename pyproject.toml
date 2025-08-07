@@ -34,10 +34,17 @@ show_error_codes = true
 
 [[tool.mypy.overrides]]
 module = [
+    "httpx.*",
+    "tenacity.*",
+    "locust.*",
+    "pydantic_settings.*",
     "sqlalchemy.*",
     "alembic.*",
     "redis.*",
-    "httpx.*",
+    "fastapi.*",
+    "uvicorn.*",
+    "pytest.*",
+    "pytest_asyncio.*",
 ]
 ignore_missing_imports = true
 

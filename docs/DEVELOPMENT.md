@@ -30,7 +30,7 @@ This document explains how to set up and work with the News Aggregator in develo
 - **redis**: Redis cache (port 6380)
 - **jupyter**: Jupyter Lab for data exploration
 - **pgadmin**: Database administration interface
-- **redis-admin**: RedisInsight administration interface (ARM64 compatible)
+- **redis-admin**: RedisInsight administration interface (cross-platform compatible)
 - **locust**: Load testing tool (optional)
 - **docs**: Documentation server (optional)
 
