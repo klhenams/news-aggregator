@@ -40,6 +40,10 @@ module = [
     "locust.*",
     "pydantic_settings.*",
     "sqlalchemy.*",
+    "app.core.*",
+    "app.models.*",
+    "app.repositories.database",
+    "app.database",
     "alembic.*",
     "redis.*",
     "fastapi.*",
@@ -48,13 +52,6 @@ module = [
     "pytest_asyncio.*",
 ]
 ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = [
-    "app.models.database",
-    "tests.*",
-    "examples.*",
-]
 ignore_errors = true
 
 [tool.pytest.ini_options]
