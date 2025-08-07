@@ -60,11 +60,8 @@ jobs:
         pip install -r requirements.txt
         pip install pytest-cov
 
-    - name: Run linting
-      run: |
-        black --check .
-        flake8 .
-        mypy .
+    - name: Run pre-commit
+      uses: pre-commit/action@v2.0.3
 
     - name: Run tests
       run: |
