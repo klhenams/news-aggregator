@@ -2,4 +2,4 @@
 max-line-length = 120
 exclude = .tox,.git,*/migrations/*,*/static/CACHE/*,docs,node_modules,venv
 docstring-convention = google
-extend-ignore = D100, D400, D102, D415, D107, D105, D212, D103
+extend-ignore = D100, D400, D102, D415, D107, D105, D212, D103, D104
