@@ -1,4 +1,5 @@
 """Dependency injection module for repositories and services."""
+
 from typing import Annotated
 
 from fastapi import Depends

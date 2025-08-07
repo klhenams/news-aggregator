@@ -1,4 +1,5 @@
 """Database implementation of news repository using SQLAlchemy."""
+
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 

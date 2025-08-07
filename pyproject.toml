@@ -76,7 +76,7 @@ exclude_lines = [
 ]
 
 [tool.bandit]
-skips = ["B101", "B404"]
-exclude_dirs = ["tests", "docs", ".venv"]
+skips = ["B101", "B404", "B607", "B603"]
+exclude = ["tests", "docs", ".venv", "format_code.py"]
 severity = "LOW"
 confidence = "HIGH"

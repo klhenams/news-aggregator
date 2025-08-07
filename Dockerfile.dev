@@ -1,0 +1,61 @@
+# Development Dockerfile with hot reloading and dev tools
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    postgresql-client \
+    redis-tools \
+    vim \
+    nano \
+    htop \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js for potential frontend tools
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# Create app directory
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt requirements-dev.txt ./
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt \
+    && pip install -r requirements-dev.txt
+
+# Install additional development tools
+RUN pip install \
+    debugpy \
+    ipython \
+    jupyter \
+    jupyterlab \
+    pytest-xdist \
+    pytest-cov \
+    locust \
+    mkdocs \
+    mkdocs-material
+
+# Copy application code
+COPY . .
+
+# Install the package in development mode
+RUN pip install -e .
+
+# Create directories for development
+RUN mkdir -p /app/logs /app/data /app/notebooks /app/docs
+
+# Expose ports
+EXPOSE 8000 5678 8888 8080 8089
+
+# Default command (can be overridden in compose)
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-dir", "src"]

@@ -1,4 +1,5 @@
 """Database models for the news application."""
+
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, DateTime, Index, Integer, String, Text

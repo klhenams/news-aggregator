@@ -1,4 +1,5 @@
 """In-memory implementation of news repository."""
+
 import asyncio
 import uuid
 from datetime import datetime

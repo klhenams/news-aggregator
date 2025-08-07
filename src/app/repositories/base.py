@@ -1,4 +1,5 @@
 """Abstract base repository interface for news data sources."""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 

@@ -1,0 +1,52 @@
+# Development dependencies
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-xdist>=3.3.0
+pytest-mock>=3.11.0
+httpx>=0.24.0
+
+# Code quality
+black>=23.7.0
+isort>=5.12.0
+flake8>=6.0.0
+flake8-docstrings>=1.7.0
+mypy>=1.5.0
+bandit>=1.7.5
+ruff>=0.0.280
+pre-commit>=3.3.0
+
+# Type stubs
+types-requests>=2.31.0
+types-redis>=4.6.0
+
+# Development tools
+ipython>=8.14.0
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+debugpy>=1.6.0
+
+# Documentation
+mkdocs>=1.5.0
+mkdocs-material>=9.1.0
+mkdocs-autorefs>=0.4.0
+
+# Load testing
+locust>=2.15.0
+
+# Database tools
+alembic>=1.11.0
+psycopg2-binary>=2.9.0
+
+# Monitoring and profiling
+py-spy>=0.3.0
+memory-profiler>=0.60.0
+
+# Additional utilities
+rich>=13.4.0
+click>=8.1.0
+python-dotenv>=1.0.0
+
+# Security scanning
+safety>=2.3.0

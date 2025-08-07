@@ -1,4 +1,5 @@
 """Simple news model using dataclasses."""
+
 from dataclasses import dataclass
 
 
