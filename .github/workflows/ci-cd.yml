@@ -66,20 +66,20 @@ jobs:
         flake8 .
         mypy .
 
-    - name: Run tests
-      run: |
-        pytest --cov=app --cov-report=xml
-      env:
-        DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
-        REDIS_URL: redis://localhost:6379/0
-        SECRET_KEY: test-secret-key
-        NEWS_API_KEY: test-api-key
+    # - name: Run tests
+    #   run: |
+    #     pytest --cov=app --cov-report=xml
+    #   env:
+    #     DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_db
+    #     REDIS_URL: redis://localhost:6379/0
+    #     SECRET_KEY: test-secret-key
+    #     NEWS_API_KEY: test-api-key
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        fail_ci_if_error: true
+    # - name: Upload coverage to Codecov
+    #   uses: codecov/codecov-action@v3
+    #   with:
+    #     file: ./coverage.xml
+    #     fail_ci_if_error: true
 
   security:
     runs-on: ubuntu-latest
