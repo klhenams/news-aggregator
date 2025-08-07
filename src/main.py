@@ -1,15 +1,14 @@
-import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
+from app.api.routes import health, news
 from app.core.config import get_settings
-from app.core.logging import setup_logging, get_logger
+from app.core.logging import get_logger, setup_logging
 from app.database import init_db
 from app.utils.async_http_client import close_http_client
-from app.api.routes import news, health
 
 # Setup logging first
 setup_logging()
@@ -23,7 +22,7 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager."""
     # Startup
     logger.info("Starting up News Aggregator application")
-    
+
     try:
         # Initialize database
         await init_db()
@@ -31,12 +30,12 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Failed to initialize database: {str(e)}")
         raise
-    
+
     yield
-    
+
     # Shutdown
     logger.info("Shutting down News Aggregator application")
-    
+
     try:
         # Close HTTP client
         await close_http_client()
@@ -53,14 +52,11 @@ app = FastAPI(
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_url="/openapi.json"
+    openapi_url="/openapi.json",
 )
 
 # Add security middleware
-app.add_middleware(
-    TrustedHostMiddleware, 
-    allowed_hosts=settings.allowed_hosts
-)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
 
 # Add CORS middleware
 app.add_middleware(
@@ -82,7 +78,7 @@ async def root():
     return {
         "message": "Welcome to News Aggregator API",
         "version": settings.app_version,
-        "docs": "/docs"
+        "docs": "/docs",
     }
 
 

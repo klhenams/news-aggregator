@@ -136,7 +136,7 @@ articles = await service.get_articles()
 ```python
 # With database session
 repo = await NewsRepositoryFactory.create_repository(
-    DataSourceType.DATABASE, 
+    DataSourceType.DATABASE,
     db_session=db_session
 )
 service = NewsService(repo)
@@ -161,7 +161,7 @@ class CustomRepository(NewsRepository):
     async def create(self, news_data: NewsCreate) -> NewsResponse:
         # Your implementation
         pass
-    
+
     # ... implement other required methods
 
 # Register your custom repository

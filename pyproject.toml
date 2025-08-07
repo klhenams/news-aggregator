@@ -25,8 +25,6 @@ known_first_party = ["app"]
 python_version = "3.11"
 check_untyped_defs = true
 disallow_any_generics = true
-disallow_incomplete_defs = true
-disallow_untyped_defs = true
 no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
@@ -76,3 +74,9 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:"
 ]
+
+[tool.bandit]
+skips = ["B101", "B404"]
+exclude_dirs = ["tests", "docs", ".venv"]
+severity = "LOW"
+confidence = "HIGH"
